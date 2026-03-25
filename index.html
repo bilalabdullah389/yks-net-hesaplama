@@ -3,90 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YKS Net ve Puan Hesaplama</title>
+    <title>Gerçek TYT Net & Puan Hesaplama</title>
     <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --card-bg: #fff;
-            --accent-color: #2ecc71;
-        }
-        [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --text-color: #f4f7f6;
-            --card-bg: #2d2d2d;
-            --accent-color: #27ae60;
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: var(--card-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
-      h2 { margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; background: var(--card-bg); color: var(--text-color); }
+        :root { --bg-color: #f4f7f6; --text-color: #333; --card-bg: #fff; --accent-color: #2ecc71; }
+        [data-theme="dark"] { --bg-color: #1a1a1a; --text-color: #f4f7f6; --card-bg: #2d2d2d; --accent-color: #27ae60; }
+        body { font-family: sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 20px 0; }
+        .container { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 95%; max-width: 450px; text-align: center; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; justify-content: space-between; }
+        .input-row label { flex: 1; text-align: left; font-weight: bold; font-size: 14px; }
+        input { width: 70px; padding: 8px; border: 1px solid #ddd; border-radius: 5px; background: var(--card-bg); color: var(--text-color); text-align: center; }
         button { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; margin-top: 10px; }
         .btn-calc { background-color: var(--accent-color); color: white; }
-        .btn-clear { background-color: #e74c3c; color: white; }
-        .btn-theme { background-color: #3498db; color: white; margin-bottom: 20px; }
-      .result { margin-top: 25px; padding: 15px; background: rgba(46, 204, 113, 0.1); border-radius: 8px; border: 1px solid var(--accent-color); }
+        .btn-theme { background-color: #3498db; color: white; margin-bottom: 15px; }
+        .result { margin-top: 20px; padding: 15px; background: rgba(46, 204, 113, 0.1); border-radius: 8px; border: 1px solid var(--accent-color); font-size: 18px; }
+        .error { color: #e74c3c; font-size: 12px; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <button class="btn-theme" onclick="toggleTheme()">🌙 Modu Değiştir</button>
-    <h2>YKS Net & Puan</h2>
+    <button class="btn-theme" onclick="toggleTheme()">🌙 Gece / Gündüz Modu</button>
+    <h2>TYT Net Hesaplama (120 Soru)</h2>
     
-    <div class="input-group">
-        <label>Türkçe (40 Soru):</label>
-        <input type=“number” id="tr-dogru" placeholder="Doğru">
-        <input type="number" id="tr-yanlis" placeholder="Yanlış" style="margin-top:5px;">
+    <div class="input-row">
+        <label>Türkçe (40):</label>
+        <input type="number" id="trD" placeholder="D" oninput="limit(this, 40)">
+        <input type=“number” id="trY" placeholder="Y" oninput="limit(this, 40)">
     </div>
-
-    <div class="input-group">
-        <label>Matematik (40 Soru):</label>
-        <input type="number" id="mat-dogru" placeholder="Doğru">
-        <input type="number" id="mat-yanlis" placeholder="Yanlış" style="margin-top:5px;">
+    <div class="input-row">
+        <label>Sosyal (20):</label>
+        <input type="number" id="sosD" placeholder="D" oninput="limit(this, 20)">
+        <input type="number" id="sosY"placeholder="Y" oninput="limit(this, 20)">
     </div>
+    <div class="input-row">
+        <label>Matematik (40):</label>
+        <input type=“number” id="matD" placeholder="D" oninput="limit(this, 40)">
+        <input type="number" id="matY" placeholder="Y" oninput="limit(this, 40)">
+    </div>
+    <div class="input-row">
+        <label>Fen (20):</label>
+        <input type="number" id="fenD" placeholder="D" oninput="limit(this, 20)">
+        <input type="number" id="fenY" placeholder="Y" oninput="limit(this, 20)">
+    </div>
+    <p id="hata-mesaji" class="error">Soru sınırını aştınız!</p>
 
     <button class="btn-calc" onclick="hesapla()">Hesapla</button>
-    <button class="btn-clear" onclick="temizle()">Temizle</button>
+
     <div class="result" id="sonuc" style="display:none;">
-        <strong>Toplam Net: </strong> <span id="toplam-net">0</span><br>
-        <strong>Tahmini TYT Puanı: </strong> <span id="tyt-puan">0</span>
+        <strong>Toplam Net: </strong> <span id="top-net">0</span><br>
+        <strong>Tahmini Puan: </strong> <span id="puan">0</span>
     </div>
 </div>
 
 <script>
+    function limit(input, max) {
+        if (parseInt(input.value) > max) {
+            input.value = max;
+            document.getElementById('hata-mesaji').style.display = 'block';
+        } else {
+            document.getElementById('hata-mesaji').style.display = 'none';
+        }
+    }
     function toggleTheme() {
-        const body = document.body;
-        const currentTheme = body.getAttribute('data-theme');
-        body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
 
     function hesapla() {
-        let trD = parseFloat(document.getElementById('tr-dogru').value) || 0;
-        let trY =
-          parseFloat(document.getElementById('tr-yanlis').value) || 0;
-        let matD = parseFloat(document.getElementById('mat-dogru').value) || 0;
-        let matY = parseFloat(document.getElementById('mat-yanlis').value) || 0;
+        const dersler = [
+            {d: 'trD', y: 'trY', m: 40},
+            {d: 'sosD', y: 'sosY', m: 20},
+            {d: 'matD', y: 'matY', m: 40},
+            {d: 'fenD', y: 'fenY', m: 20}
+        ];
 
-        let trNet = trD - (trY * 0.25);
-        let matNet = matD - (matY * 0.25);
-        let toplamNet = trNet + matNet;
-        
-        // Basit bir TYT Puan formülü (100 taban puan + her net yaklasik 3.3 puan)
-        let tytPuan = 100 + (toplamNet * 3.3);
+        let toplamNet = 0;
+        dersler.forEach(ders => {
+            let d = parseFloat(document.getElementById(ders.d).value) || 0;
+            let y =
+                parseFloat(document.getElementById(ders.y).value) || 0;
+            if (d + y > ders.m) { d = ders.m; y = 0; } // Koruma
+            toplamNet += (d - (y * 0.25));
+        });
 
-        document.getElementById('toplam-net').innerText = toplamNet.toFixed(2);
-        document.getElementById('tyt-puan').innerText = tytPuan.toFixed(2);
+        let tytPuan = 100 + (toplamNet * 3.33); // Ortalama bir katsayı
+
+        document.getElementById('top-net').innerText = toplamNet.toFixed(2);
+        document.getElementById('puan').innerText = tytPuan.toFixed(2);
         document.getElementById('sonuc').style.display = 'block';
     }
-
-    function temizle() {
-        document.querySelectorAll('input').forEach(input => input.value = '');
-        document.getElementById('sonuc').style.display = 'none';
-    }
 </script>
-
 </body>
 </html>

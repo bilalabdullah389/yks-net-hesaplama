@@ -20,6 +20,15 @@
         .btn-calc { background-color: var(--accent-color); color: white; }
         .btn-theme { background-color: #3498db; color: white; margin-bottom: 20px; }
         .result { margin-top: 20px; padding: 15px; background: rgba(46, 204, 113, 0.1); border-radius: 8px; border: 1px solid var(--accent-color); }
+        .countdown {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px dashed #3498db;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #3498db;
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -27,6 +36,7 @@
 <div class="container">
     <button class="btn-theme" onclick="toggleTheme()">🌙 Modu Değiştir</button>
     <h2>TYT Net Hesaplama</h2>
+    <div class="countdown" id="sayac">YKS'ye Zaman Azalıyor...</div>
     <div class="input-group">
         <label>Türkçe (40 Soru):</label>
         <div class="inputs">

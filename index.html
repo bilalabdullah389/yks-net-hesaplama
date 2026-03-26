@@ -36,7 +36,7 @@
 <div class="container">
     <button class="btn-theme" onclick="toggleTheme()">🌙 Modu Değiştir</button>
     <h2>TYT Net Hesaplama</h2>
-    <div class="countdown" id="sayac">YKS'ye Zaman Azaliyor...</div>
+    <div class="countdown" id="sayac">YKS'ye Zaman Azalıyor...</div>
     <div class="input-group">
         <label>Türkçe (40 Soru):</label>
         <div class="inputs">
@@ -107,6 +107,20 @@
         document.getElementById('puan').innerText = tytPuan.toFixed(2);
         document.getElementById('sonuc').style.display = 'block';
     }
+    function yksSayaci() {
+        const hedefGun = new Date("June 13, 2026 10:00:00").getTime();
+        const simdi = new Date().getTime();
+        const fark = hedefGun - simdi;
+
+        const gun = Math.floor(fark / (1000 * 60 * 60 * 24));
+        const saat = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const dakika = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById("sayac").innerHTML = `⏳ YKS’ye: ${gun} Gün ${saat} Saat ${dakika} Dakika Kaldı`;
+    }
+    // Sayacı her dakika güncelle ve hemen başlat
+    setInterval(yksSayaci, 60000);
+    yksSayaci();
 </script>
 
 </body>

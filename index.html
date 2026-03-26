@@ -116,7 +116,7 @@
         const saat = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const dakika = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
 
-        document.getElementById("sayac").innerHTML = `⏳ YKS’ye: ${gun} Gün ${saat} Saat ${dakika} Dakika Kaldı`;
+        document.getElementById("sayac").innerHTML = `⏳ YKS’ye: ${gun} G ${saat} S ${dakika} D Kaldı`;
     }
     // Sayacı her dakika güncelle ve hemen başlat
     setInterval(yksSayaci, 60000);
